@@ -1,12 +1,5 @@
 import streamlit as st
 import pickle
-from pathlib import Path
-
-
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_DIR = BASE_DIR / "model"
-MODEL_PATH = MODEL_DIR / "email_model.pkl"
-VECTORIZER_PATH = MODEL_DIR / "vectorizer.pkl"
 
 
 st.set_page_config(
@@ -18,16 +11,13 @@ st.set_page_config(
 st.title("📧 Email Classification System using NLP")
 
 
-if not MODEL_PATH.exists() or not VECTORIZER_PATH.exists():
-    st.error("Model files are missing. Please train the model first.")
-    st.stop()
+model = pickle.load(
+    open("model/email_model.pkl","rb")
+)
 
-
-with open(MODEL_PATH, "rb") as model_file:
-    model = pickle.load(model_file)
-
-with open(VECTORIZER_PATH, "rb") as vectorizer_file:
-    vectorizer = pickle.load(vectorizer_file)
+vectorizer = pickle.load(
+    open("model/vectorizer.pkl","rb")
+)
 
 
 subject = st.text_input("Email Subject")
