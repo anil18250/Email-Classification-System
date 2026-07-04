@@ -1,10 +1,6 @@
-email,category
-"Congratulations you won a free prize click now",spam
-"Win money now claim your reward",spam
-"You have received a lottery ticket",spam
-"Meeting scheduled tomorrow at 10 AM",ham
-"Project discussion with team today",ham
-"Your order has been shipped successfully",ham
-"Your bank statement is ready",ham
-"Get free discount offer today",spam
-"Let's have lunch tomorrow",ham
+subject,message,label
+Congratulations,You won a free iPhone Click here to claim,Spam
+Project Meeting,Meeting tomorrow at 10 AM,Work
+Big Sale,50% OFF today only,Promotion
+Birthday Party,Join my birthday celebration this Saturday,Social
+Hello,How are you doing today,Normal
