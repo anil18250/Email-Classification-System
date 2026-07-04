@@ -1,81 +1,36 @@
 import pandas as pd
 import pickle
-from pathlib import Path
-
-
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
+# Load dataset
+df = pd.read_csv("dataset/emails.csv")
 
-from preprocess import clean_text
+# Combine subject and message columns
+df["text"] = (df["subject"].fillna("") + " " + df["message"].fillna("")).str.strip()
 
+X = df["text"]
+y = df["label"]
 
-BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR.parent / "dataset" / "emails.csv"
-MODEL_DIR = BASE_DIR
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
+# Vectorizer
+vectorizer = TfidfVectorizer(stop_words="english")
 
-# Load data
+X_train_vec = vectorizer.fit_transform(X_train)
 
-data = pd.read_csv(DATA_PATH)
-
-
-
-# Cleaning
-
-data["email"] = data["email"].apply(
-    clean_text
-)
-
-
-
-X = data["email"]
-
-y = data["category"]
-
-
-
-# Vectorization
-
-vectorizer = TfidfVectorizer()
-
-
-X = vectorizer.fit_transform(X)
-
-
-
-# Split
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)
-
-
-
-# Train
-
+# Model
 model = MultinomialNB()
+model.fit(X_train_vec, y_train)
 
+# Save vectorizer
+with open("model/vectorizer.pkl", "wb") as f:
+    pickle.dump(vectorizer, f)
 
-model.fit(
-    X_train,
-    y_train
-)
+# Save model
+with open("model/email_model.pkl", "wb") as f:
+    pickle.dump(model, f)
 
-
-
-# Save
-
-with open(MODEL_DIR / "email_model.pkl", "wb") as model_file:
-    pickle.dump(model, model_file)
-
-with open(MODEL_DIR / "vectorizer.pkl", "wb") as vectorizer_file:
-    pickle.dump(vectorizer, vectorizer_file)
-
-
-
-print("Training Completed")
+print("✅ vectorizer.pkl created successfully")
