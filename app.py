@@ -18,7 +18,7 @@ st.title("📧 Email Classification System using NLP")
 st.write("Classify emails into Spam, Work, Promotion, Social, or Normal.")
 
 if not EMAIL_MODEL_PATH.exists() or not VECTORIZER_PATH.exists():
-    st.error("Model files are missing. Run `python train.py` first.")
+    st.error("Model files are missing. Run `python model/train.py` first.")
     st.stop()
 
 with EMAIL_MODEL_PATH.open("rb") as f:
